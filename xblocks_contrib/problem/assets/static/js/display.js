@@ -639,6 +639,9 @@ Problem.prototype.reset_internal = function () {
         that.el.trigger("contentChanged", [that.id, response.html, response]);
         that.render(response.html, that.scroll_to_problem_meta);
         that.updateProgress(response);
+        window.requestAnimationFrame(function () {
+          that.submitAnswersAndSubmitButton();
+        });
         return window.SR.readText(gettext("This problem has been reset."));
       } else {
         return that.gentle_alert(response.msg);
