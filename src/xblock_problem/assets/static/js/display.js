@@ -663,11 +663,9 @@ Problem.prototype.reset_internal = function () {
         that.el.trigger("contentChanged", [that.id, response.html, response]);
         that.render(response.html, that.scroll_to_problem_meta);
         that.updateProgress(response);
-        // After reset, bind() calls submitAnswersAndSubmitButton() synchronously, but
-        // browsers cache the checked state of new inputs by name/id before repainting
-        // so :checked still returns true on fresh inputs and the button stays enabled.
-        // requestAnimationFrame defers the check until after the repaint, when the
-        // stale form state is gone and the button is correctly disabled.
+        // The request's .always() handler in disableAllButtonsWhileRunning() restores
+        // initially enabled buttons after render/bind checks the reset inputs. Defer
+        // this check until that handler finishes so Submit reflects the new answers.
         window.requestAnimationFrame(function () {
           that.submitAnswersAndSubmitButton();
         });
